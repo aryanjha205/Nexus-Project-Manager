@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, FolderGit2, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, FolderGit2, LogOut } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
-function Sidebar({ onLogout }) {
+function Sidebar({ onLogout }: { onLogout: () => void }) {
   const location = useLocation();
   const navItems = [
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -39,7 +39,7 @@ function Sidebar({ onLogout }) {
   );
 }
 
-function Layout({ children, onLogout }) {
+function Layout({ children, onLogout }: { children: React.ReactNode, onLogout: () => void }) {
   return (
     <div className="layout">
       <Sidebar onLogout={onLogout} />
@@ -50,7 +50,7 @@ function Layout({ children, onLogout }) {
   );
 }
 
-function Login({ setToken }) {
+function Login({ setToken }: { setToken: (token: string) => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
