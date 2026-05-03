@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, FolderGit2, LogOut, Plus, X, Users } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, FolderGit2, LogOut, Plus, X, Users, Mail, Lock, User, ShieldCheck, Key } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -136,49 +136,57 @@ function Login({ setToken }: { setToken: (token: string) => void }) {
 
       {/* Right side: Login Form */}
       <div className="login-form-container">
-        <div className="glass-panel hoverable animate-fade-in" style={{ width: '100%', maxWidth: '420px', zIndex: 1, padding: '2.5rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', fontFamily: 'Outfit' }}>
-              {showOtp ? 'Verify OTP' : isRegistering ? 'Create Account' : 'Welcome Back'}
+        <div className="glass-panel login-panel animate-fade-in" style={{ width: '100%', maxWidth: '440px', zIndex: 1, padding: '3rem 2.5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ width: '64px', height: '64px', margin: '0 auto 1.5rem', background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(217, 70, 239, 0.2))', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ShieldCheck size={32} style={{ color: 'var(--text-primary)' }} />
+            </div>
+            <h2 style={{ fontSize: '2.25rem', fontWeight: '800', marginBottom: '0.75rem', fontFamily: 'Outfit', letterSpacing: '-0.02em' }}>
+              {showOtp ? 'Verify Access' : isRegistering ? 'Create Account' : 'Welcome Back'}
             </h2>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              {showOtp ? 'Check your email for the code.' : isRegistering ? 'Sign up to start managing your projects.' : 'Enter your credentials to access your account.'}
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
+              {showOtp ? 'Check your email for the verification code.' : isRegistering ? 'Sign up to start orchestrating your workflow.' : 'Enter your credentials to securely access your workspace.'}
             </p>
           </div>
 
-          {error && <div style={{ color: 'var(--danger)', background: 'rgba(239, 68, 68, 0.1)', padding: '0.75rem', borderRadius: '0.5rem', marginBottom: '1.5rem', textAlign: 'center', border: '1px solid rgba(239, 68, 68, 0.2)' }}>{error}</div>}
+          {error && <div style={{ color: 'var(--danger)', background: 'rgba(239, 68, 68, 0.1)', padding: '0.875rem', borderRadius: '0.75rem', marginBottom: '1.5rem', textAlign: 'center', border: '1px solid rgba(239, 68, 68, 0.2)', fontSize: '0.9rem', fontWeight: '500' }}>{error}</div>}
           
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {!showOtp && isRegistering && (
               <>
-                <div className="input-group">
-                  <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
+                <div className="input-group relative">
+                  <div className="input-icon-wrapper"><User size={18} /></div>
+                  <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required className="premium-input with-icon" />
                 </div>
-                <div className="input-group">
-                  <select value={role} onChange={e => setRole(e.target.value)} required>
-                    <option value="Member">Member</option>
-                    <option value="Admin">Admin</option>
+                <div className="input-group relative">
+                  <div className="input-icon-wrapper"><ShieldCheck size={18} /></div>
+                  <select value={role} onChange={e => setRole(e.target.value)} required className="premium-input with-icon">
+                    <option value="Member">Member Role</option>
+                    <option value="Admin">Admin Role</option>
                   </select>
                 </div>
               </>
             )}
             {!showOtp && (
               <>
-                <div className="input-group">
-                  <input type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} required />
+                <div className="input-group relative">
+                  <div className="input-icon-wrapper"><Mail size={18} /></div>
+                  <input type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} required className="premium-input with-icon" />
                 </div>
-                <div className="input-group">
-                  <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
+                <div className="input-group relative">
+                  <div className="input-icon-wrapper"><Lock size={18} /></div>
+                  <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required className="premium-input with-icon" />
                 </div>
               </>
             )}
             {showOtp && (
-              <div className="input-group">
-                <input type="text" placeholder="Enter 6-digit OTP" value={otp} onChange={e => setOtp(e.target.value)} required style={{ textAlign: 'center', letterSpacing: '0.25em', fontSize: '1.25rem' }} />
+              <div className="input-group relative">
+                <div className="input-icon-wrapper"><Key size={18} /></div>
+                <input type="text" placeholder="Enter 6-digit OTP" value={otp} onChange={e => setOtp(e.target.value)} required className="premium-input with-icon" style={{ letterSpacing: '0.2em', fontWeight: 'bold' }} />
               </div>
             )}
-            <button type="submit" className="btn-primary" style={{ marginTop: '0.5rem', padding: '1rem', fontSize: '1.1rem' }}>
-              {showOtp ? 'Verify & Continue' : isRegistering ? 'Register Now' : 'Sign In'}
+            <button type="submit" className="btn-primary" style={{ marginTop: '0.75rem', padding: '1.1rem', fontSize: '1.1rem', borderRadius: '0.75rem', width: '100%', boxShadow: '0 8px 20px -6px var(--primary-glow)' }}>
+              {showOtp ? 'Verify & Continue' : isRegistering ? 'Register Now' : 'Secure Login'}
             </button>
           </form>
 
