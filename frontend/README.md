@@ -1,14 +1,20 @@
-# Nexus - Project Manager PWA
+# Building Role-Based Project Manager
 
-Nexus is a modern, full-stack Progressive Web Application (PWA) designed for seamless project and task management. It combines a robust FastAPI backend with a dynamic React/Vite frontend.
+Build a web app where users can create projects, assign tasks, and track progress with role-based access (Admin/Member).
 
-## ✨ Features
+**🌐 Live Demo:** [https://nexus-project-manager-lake.vercel.app/](https://nexus-project-manager-lake.vercel.app/)
 
-- **Progressive Web App:** Fully installable and responsive across all devices.
-- **FastAPI Backend:** High-performance, async backend architecture.
-- **Authentication:** Secure JWT-based authentication with OTP email verification.
-- **Dashboard Analytics:** Real-time metrics on your tasks (pending, completed, overdue).
-- **Vercel Ready:** Pre-configured for immediate monorepo deployment on Vercel.
+## 🚀 Key Features
+- Authentication (Signup/Login)
+- Project & team management
+- Task creation, assignment & status tracking
+- Dashboard (tasks, status, overdue)
+
+## ⚙️ Requirements
+- REST APIs + Database (FastAPI + MongoDB)
+- Proper validations & relationships
+- Role-based access control (Admin/Member)
+
 
 ## 🛠️ Tech Stack
 

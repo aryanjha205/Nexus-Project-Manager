@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, FolderGit2, LogOut, Plus, X } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, FolderGit2, LogOut, Plus, X, Users } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ function Sidebar({ onLogout }: { onLogout: () => void }) {
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/projects', label: 'Projects', icon: FolderGit2 },
     { path: '/tasks', label: 'Tasks', icon: CheckSquare },
+    { path: '/team', label: 'Team Directory', icon: Users, adminOnly: true },
   ];
 
   const token = localStorage.getItem('token');
@@ -28,7 +29,7 @@ function Sidebar({ onLogout }: { onLogout: () => void }) {
         <div style={{ fontSize: '0.75rem', color: 'var(--accent)', marginTop: '0.25rem', fontWeight: '500' }}>{role} Role</div>
       </div>
       <nav style={{ flex: 1 }}>
-        {navItems.map((item) => (
+        {navItems.filter(item => !item.adminOnly || role === 'Admin').map((item) => (
           <Link
             key={item.path}
             to={item.path}
@@ -527,6 +528,61 @@ function Tasks() {
   );
 }
 
+function Team() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/users`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        setUsers(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  return (
+    <div className="animate-fade-in relative">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Team Directory</h1>
+      </div>
+      <div className="glass-panel hoverable" style={{ padding: '0', overflow: 'hidden' }}>
+        <table className="custom-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u: any) => (
+              <tr key={u._id}>
+                <td>{u.name}</td>
+                <td>{u.email}</td>
+                <td>
+                  <span className="badge" style={{ background: u.role === 'Admin' ? 'rgba(217, 70, 239, 0.1)' : 'rgba(79, 70, 229, 0.1)', color: u.role === 'Admin' ? 'var(--accent)' : 'var(--primary)', borderColor: u.role === 'Admin' ? 'rgba(217, 70, 239, 0.2)' : 'rgba(79, 70, 229, 0.2)' }}>
+                    {u.role}
+                  </span>
+                </td>
+                <td><span className="badge completed">Active</span></td>
+              </tr>
+            ))}
+            {users.length === 0 && (
+              <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No users found.</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
 
@@ -534,6 +590,8 @@ function App() {
     localStorage.removeItem('token');
     setToken(null);
   };
+
+  const role = token ? JSON.parse(atob(token.split('.')[1])).role : 'Member';
 
   if (!token) {
     return <Login setToken={setToken} />;
@@ -546,6 +604,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/tasks" element={<Tasks />} />
+          <Route path="/team" element={role === 'Admin' ? <Team /> : <Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
