@@ -340,7 +340,7 @@ function Projects() {
 
       {showModal && (
         <div className="modal-overlay">
-          <div className="glass-panel modal-content animate-fade-in" style={{ width: '100%', maxWidth: '500px', position: 'relative', overflow: 'hidden' }}>
+          <div className="glass-panel modal-content animate-fade-in" style={{ width: '100%', maxWidth: '500px', position: 'relative' }}>
             <div className="card-gradient-top"></div>
             <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)', opacity: 0.5 }}></div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', position: 'relative', zIndex: 1 }}>
@@ -481,7 +481,7 @@ function Tasks() {
 
       {showModal && (
         <div className="modal-overlay">
-          <div className="glass-panel modal-content animate-fade-in" style={{ width: '100%', maxWidth: '500px', position: 'relative', overflow: 'hidden' }}>
+          <div className="glass-panel modal-content animate-fade-in" style={{ width: '100%', maxWidth: '500px', position: 'relative' }}>
             <div className="card-gradient-top"></div>
             <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'radial-gradient(circle, var(--primary-glow) 0%, transparent 70%)', opacity: 0.5 }}></div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', position: 'relative', zIndex: 1 }}>

@@ -304,16 +304,18 @@ input::placeholder {
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 100;
-  padding: 1rem;
+  padding: 3rem 1rem;
+  overflow-y: auto;
 }
 
 .modal-content {
   background: var(--surface-color);
   border: 1px solid var(--border-highlight);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  margin: auto;
   max-height: 90vh;
   overflow-y: auto;
 }
