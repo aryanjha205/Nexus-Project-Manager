@@ -80,7 +80,19 @@ function Login({ setToken }: { setToken: (token: string) => void }) {
         setToken(res.data.access_token);
       }
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'An error occurred');
+      if (err.response?.data?.detail) {
+        // FastAPI might return an array of validation errors for 422
+        if (Array.isArray(err.response.data.detail)) {
+          setError(err.response.data.detail[0].msg);
+        } else {
+          setError(err.response.data.detail);
+        }
+      } else if (!err.response || err.message === 'Network Error') {
+        setError('Cannot connect to the server. Please ensure the backend is running.');
+      } else {
+        setError(err.message || 'An error occurred');
+      }
+
       if (err.response?.data?.detail === "Inactive user. Please verify OTP.") {
         setShowOtp(true);
       }
