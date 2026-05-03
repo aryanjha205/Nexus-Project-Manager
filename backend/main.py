@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import create_indexes
-from routes import auth, projects, tasks
+from routes import auth, projects, tasks, users
 
 app = FastAPI(title="Project Manager API")
 
@@ -20,6 +20,7 @@ async def startup_event():
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
 app.include_router(tasks.router, prefix="/api/tasks", tags=["tasks"])
+app.include_router(users.router, prefix="/api/users", tags=["users"])
 
 @app.get("/")
 def read_root():

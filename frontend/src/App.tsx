@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, FolderGit2, LogOut } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, FolderGit2, LogOut, Plus, X } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -13,11 +13,19 @@ function Sidebar({ onLogout }: { onLogout: () => void }) {
     { path: '/tasks', label: 'Tasks', icon: CheckSquare },
   ];
 
+  const token = localStorage.getItem('token');
+  const role = token ? JSON.parse(atob(token.split('.')[1])).role : 'Member';
+  const email = token ? JSON.parse(atob(token.split('.')[1])).sub : '';
+
   return (
     <div className="sidebar">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
         <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--primary), var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>PM</div>
         <h2 style={{ fontSize: '1.25rem', fontWeight: '700' }}>Nexus</h2>
+      </div>
+      <div style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', marginBottom: '2rem', border: '1px solid var(--border)' }}>
+        <div style={{ fontSize: '0.875rem', fontWeight: '600' }} className="truncate" title={email}>{email}</div>
+        <div style={{ fontSize: '0.75rem', color: 'var(--accent)', marginTop: '0.25rem', fontWeight: '500' }}>{role} Role</div>
       </div>
       <nav style={{ flex: 1 }}>
         {navItems.map((item) => (
@@ -55,6 +63,7 @@ function Login({ setToken }: { setToken: (token: string) => void }) {
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [name, setName] = useState('');
+  const [role, setRole] = useState('Member');
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
@@ -69,7 +78,7 @@ function Login({ setToken }: { setToken: (token: string) => void }) {
         setIsRegistering(false);
         alert('Verified! You can now login.');
       } else if (isRegistering) {
-        await axios.post(`${API_URL}/auth/register`, { name, email, password, role: 'Member' });
+        await axios.post(`${API_URL}/auth/register`, { name, email, password, role });
         setShowOtp(true);
       } else {
         const formData = new URLSearchParams();
@@ -140,9 +149,17 @@ function Login({ setToken }: { setToken: (token: string) => void }) {
           
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {!showOtp && isRegistering && (
-              <div className="input-group">
-                <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
-              </div>
+              <>
+                <div className="input-group">
+                  <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
+                </div>
+                <div className="input-group">
+                  <select value={role} onChange={e => setRole(e.target.value)} required>
+                    <option value="Member">Member</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                </div>
+              </>
             )}
             {!showOtp && (
               <>
@@ -229,11 +246,27 @@ function Dashboard() {
         </div>
       </div>
       
-      <div className="glass-panel hoverable animate-fade-in-delayed">
-        <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <FolderGit2 size={20} style={{ color: 'var(--primary)' }} /> Recent Activity
+      <div className="glass-panel hoverable animate-fade-in-delayed" style={{ position: 'relative', overflow: 'hidden' }}>
+        <div className="card-gradient-top"></div>
+        <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <FolderGit2 size={20} style={{ color: 'var(--primary)' }} /> System Activity
         </h2>
-        <p style={{ color: 'var(--text-secondary)' }}>No recent activity to show. Keep up the good work!</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '0.75rem', border: '1px solid var(--border)', transition: 'all 0.3s' }} className="hoverable-item">
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 10px var(--success)' }}></div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: '600' }}>Platform initialization complete</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Just now</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '0.75rem', border: '1px solid var(--border)', transition: 'all 0.3s' }} className="hoverable-item">
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--primary)', boxShadow: '0 0 10px var(--primary)' }}></div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: '600' }}>Dashboard statistics updated</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>2 mins ago</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -241,7 +274,12 @@ function Dashboard() {
 
 function Projects() {
   const [projects, setProjects] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newProject, setNewProject] = useState({ name: '', description: '' });
   
+  const token = localStorage.getItem('token');
+  const role = token ? JSON.parse(atob(token.split('.')[1])).role : 'Member';
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -256,42 +294,150 @@ function Projects() {
     fetchProjects();
   }, []);
 
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${API_URL}/projects/`, newProject, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setProjects([...projects, res.data] as any);
+      setShowModal(false);
+      setNewProject({ name: '', description: '' });
+    } catch (err: any) {
+      alert(err.response?.data?.detail || 'Failed to create project');
+    }
+  };
+
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in relative">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Projects</h1>
-        <button className="btn-primary">New Project</button>
+        {role === 'Admin' && (
+          <button className="btn-primary" onClick={() => setShowModal(true)}>
+            <Plus size={20} /> New Project
+          </button>
+        )}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.75rem' }}>
         {projects.map((p: any) => (
-          <div key={p._id} className="glass-panel hoverable">
+          <div key={p._id} className="glass-panel hoverable" style={{ position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div className="card-gradient-top"></div>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <div style={{ background: 'rgba(79, 70, 229, 0.1)', padding: '0.75rem', borderRadius: '0.75rem', color: 'var(--primary)' }}>
+                <FolderGit2 size={24} />
+              </div>
+              <span className="badge" style={{ background: 'rgba(255,255,255,0.05)' }}>Active</span>
+            </div>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{p.name}</h3>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>{p.description}</p>
-            <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Members: {p.members?.length || 0}</div>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', flex: 1, lineHeight: '1.5' }}>{p.description}</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
+              <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                 <div style={{ display: 'flex', marginLeft: '0.5rem' }}>
+                   <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--primary), var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold', color: 'white', border: '2px solid var(--surface-color)' }}>
+                     {p.members?.length || 0}
+                   </div>
+                 </div>
+                 Members
+              </div>
+            </div>
           </div>
         ))}
-        {projects.length === 0 && <p>No projects found.</p>}
+        {projects.length === 0 && (
+          <div style={{ gridColumn: '1 / -1', padding: '3rem', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '1rem', border: '1px dashed var(--border)' }}>
+            <FolderGit2 size={48} style={{ margin: '0 auto 1rem', opacity: 0.5, color: 'var(--text-secondary)' }} />
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>No projects yet</h3>
+            <p style={{ color: 'var(--text-secondary)' }}>Create a new project to get started.</p>
+          </div>
+        )}
       </div>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="glass-panel modal-content animate-fade-in" style={{ width: '100%', maxWidth: '500px', position: 'relative', overflow: 'hidden' }}>
+            <div className="card-gradient-top"></div>
+            <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)', opacity: 0.5 }}></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', position: 'relative', zIndex: 1 }}>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>Create Project</h2>
+              <button onClick={() => setShowModal(false)} className="close-btn"><X size={24} /></button>
+            </div>
+            <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', position: 'relative', zIndex: 1 }}>
+              <input type="text" placeholder="Project Name" value={newProject.name} onChange={e => setNewProject({...newProject, name: e.target.value})} required className="premium-input" />
+              <textarea placeholder="Description" value={newProject.description} onChange={e => setNewProject({...newProject, description: e.target.value})} required rows={3} className="premium-input"></textarea>
+              <button type="submit" className="btn-primary" style={{ marginTop: '1rem', padding: '1.25rem' }}>Launch Project</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newTask, setNewTask] = useState({ title: '', description: '', project_id: '', assigned_to: '', deadline: '' });
+
+  const token = localStorage.getItem('token');
+  const role = token ? JSON.parse(atob(token.split('.')[1])).role : 'Member';
+
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/tasks`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setTasks(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/tasks`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        setTasks(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
     fetchTasks();
-  }, []);
+    if (role === 'Admin') {
+      axios.get(`${API_URL}/projects`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      }).then(res => setProjects(res.data)).catch(console.error);
+
+      axios.get(`${API_URL}/users`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      }).then(res => setUsers(res.data)).catch(console.error);
+    }
+  }, [role]);
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${API_URL}/tasks/`, {
+        ...newTask,
+        deadline: new Date(newTask.deadline).toISOString()
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setShowModal(false);
+      setNewTask({ title: '', description: '', project_id: '', assigned_to: '', deadline: '' });
+      fetchTasks();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || 'Failed to create task');
+    }
+  };
+
+  const handleUpdateStatus = async (taskId: string, newStatus: string, task: any) => {
+    try {
+      await axios.put(`${API_URL}/tasks/${taskId}`, {
+        title: task.title,
+        description: task.description,
+        status: newStatus,
+        deadline: task.deadline
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      fetchTasks();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || 'Failed to update status');
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     const lower = status.toLowerCase().replace(' ', '');
@@ -299,10 +445,14 @@ function Tasks() {
   }
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in relative">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Tasks</h1>
-        <button className="btn-primary">New Task</button>
+        {role === 'Admin' && (
+          <button className="btn-primary" onClick={() => setShowModal(true)}>
+            <Plus size={20} /> New Task
+          </button>
+        )}
       </div>
       <div className="glass-panel hoverable" style={{ padding: '0', overflow: 'hidden' }}>
         <table className="custom-table">
@@ -311,6 +461,7 @@ function Tasks() {
               <th>Title</th>
               <th>Status</th>
               <th>Deadline</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -319,14 +470,59 @@ function Tasks() {
                 <td>{t.title}</td>
                 <td>{getStatusBadge(t.status)}</td>
                 <td>{t.deadline ? new Date(t.deadline).toLocaleDateString() : 'N/A'}</td>
+                <td>
+                  <div className="status-select-wrapper">
+                    <select 
+                      value={t.status} 
+                      onChange={e => handleUpdateStatus(t._id, e.target.value, t)}
+                      className="status-select"
+                    >
+                      <option value="To Do">To Do</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+                </td>
               </tr>
             ))}
             {tasks.length === 0 && (
-              <tr><td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No tasks found.</td></tr>
+              <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No tasks found.</td></tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="glass-panel modal-content animate-fade-in" style={{ width: '100%', maxWidth: '500px', position: 'relative', overflow: 'hidden' }}>
+            <div className="card-gradient-top"></div>
+            <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'radial-gradient(circle, var(--primary-glow) 0%, transparent 70%)', opacity: 0.5 }}></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', position: 'relative', zIndex: 1 }}>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>Create Task</h2>
+              <button onClick={() => setShowModal(false)} className="close-btn"><X size={24} /></button>
+            </div>
+            <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', position: 'relative', zIndex: 1 }}>
+              <input type="text" placeholder="Task Title" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} required className="premium-input" />
+              <textarea placeholder="Detailed Description" value={newTask.description} onChange={e => setNewTask({...newTask, description: e.target.value})} required rows={3} className="premium-input"></textarea>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <select value={newTask.project_id} onChange={e => setNewTask({...newTask, project_id: e.target.value})} required className="premium-input">
+                  <option value="" disabled>Select Project</option>
+                  {projects.map((p: any) => <option key={p._id} value={p._id}>{p.name}</option>)}
+                </select>
+                <select value={newTask.assigned_to} onChange={e => setNewTask({...newTask, assigned_to: e.target.value})} required className="premium-input">
+                  <option value="" disabled>Assign To</option>
+                  {users.map((u: any) => <option key={u._id} value={u._id}>{u.name} ({u.email})</option>)}
+                </select>
+              </div>
+              <div className="premium-input-group">
+                <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', display: 'block' }}>Deadline</label>
+                <input type="date" value={newTask.deadline} onChange={e => setNewTask({...newTask, deadline: e.target.value})} required className="premium-input" />
+              </div>
+              <button type="submit" className="btn-primary" style={{ marginTop: '1rem', padding: '1.25rem' }}>Deploy Task</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
