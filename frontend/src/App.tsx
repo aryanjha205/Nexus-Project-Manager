@@ -88,37 +88,79 @@ function Login({ setToken }: { setToken: (token: string) => void }) {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '1rem', position: 'relative' }}>
-      <div className="glass-panel hoverable animate-fade-in" style={{ width: '100%', maxWidth: '420px', position: 'relative', zIndex: 1 }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>
-          {showOtp ? 'Verify OTP' : isRegistering ? 'Create Account' : 'Welcome Back'}
-        </h2>
-        {error && <div style={{ color: 'var(--danger)', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {!showOtp && isRegistering && (
-            <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
-          )}
-          {!showOtp && (
-            <>
-              <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-              <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-            </>
-          )}
-          {showOtp && (
-            <input type="text" placeholder="Enter OTP" value={otp} onChange={e => setOtp(e.target.value)} required />
-          )}
-          <button type="submit" className="btn-primary">
-            {showOtp ? 'Verify' : isRegistering ? 'Register' : 'Login'}
-          </button>
-        </form>
-        {!showOtp && (
-          <p style={{ marginTop: '1rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-            {isRegistering ? 'Already have an account? ' : "Don't have an account? "}
-            <button onClick={() => setIsRegistering(!isRegistering)} style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
-              {isRegistering ? 'Login' : 'Register'}
-            </button>
+    <div className="login-container">
+      {/* Left side: branding/visuals */}
+      <div className="login-banner">
+        <div className="banner-content animate-fade-in">
+          <div className="logo-box">PM</div>
+          <h1 className="banner-title">Nexus</h1>
+          <p className="banner-subtitle">
+            Orchestrate your workflow, track progress, and conquer your goals with the ultimate project management platform.
           </p>
-        )}
+          
+          <div className="feature-list">
+            <div className="feature-item">
+              <CheckSquare size={20} className="feature-icon" />
+              <span>Real-time Task Tracking</span>
+            </div>
+            <div className="feature-item">
+              <FolderGit2 size={20} className="feature-icon" />
+              <span>Intuitive Project Organization</span>
+            </div>
+          </div>
+        </div>
+        <div className="banner-overlay"></div>
+      </div>
+
+      {/* Right side: Login Form */}
+      <div className="login-form-container">
+        <div className="glass-panel hoverable animate-fade-in" style={{ width: '100%', maxWidth: '420px', zIndex: 1, padding: '2.5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', fontFamily: 'Outfit' }}>
+              {showOtp ? 'Verify OTP' : isRegistering ? 'Create Account' : 'Welcome Back'}
+            </h2>
+            <p style={{ color: 'var(--text-secondary)' }}>
+              {showOtp ? 'Check your email for the code.' : isRegistering ? 'Sign up to start managing your projects.' : 'Enter your credentials to access your account.'}
+            </p>
+          </div>
+
+          {error && <div style={{ color: 'var(--danger)', background: 'rgba(239, 68, 68, 0.1)', padding: '0.75rem', borderRadius: '0.5rem', marginBottom: '1.5rem', textAlign: 'center', border: '1px solid rgba(239, 68, 68, 0.2)' }}>{error}</div>}
+          
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            {!showOtp && isRegistering && (
+              <div className="input-group">
+                <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
+              </div>
+            )}
+            {!showOtp && (
+              <>
+                <div className="input-group">
+                  <input type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} required />
+                </div>
+                <div className="input-group">
+                  <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
+                </div>
+              </>
+            )}
+            {showOtp && (
+              <div className="input-group">
+                <input type="text" placeholder="Enter 6-digit OTP" value={otp} onChange={e => setOtp(e.target.value)} required style={{ textAlign: 'center', letterSpacing: '0.25em', fontSize: '1.25rem' }} />
+              </div>
+            )}
+            <button type="submit" className="btn-primary" style={{ marginTop: '0.5rem', padding: '1rem', fontSize: '1.1rem' }}>
+              {showOtp ? 'Verify & Continue' : isRegistering ? 'Register Now' : 'Sign In'}
+            </button>
+          </form>
+
+          {!showOtp && (
+            <div style={{ marginTop: '2rem', textAlign: 'center', color: 'var(--text-secondary)', borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
+              {isRegistering ? 'Already have an account? ' : "Don't have an account? "}
+              <button onClick={() => setIsRegistering(!isRegistering)} style={{ color: 'var(--accent)', fontWeight: '600', transition: 'color 0.2s' }}>
+                {isRegistering ? 'Sign In' : 'Create One'}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
