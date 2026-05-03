@@ -88,8 +88,8 @@ function Login({ setToken }: { setToken: (token: string) => void }) {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '1rem' }}>
-      <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '400px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '1rem', position: 'relative' }}>
+      <div className="glass-panel hoverable animate-fade-in" style={{ width: '100%', maxWidth: '420px', position: 'relative', zIndex: 1 }}>
         <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>
           {showOtp ? 'Verify OTP' : isRegistering ? 'Create Account' : 'Welcome Back'}
         </h2>
@@ -145,39 +145,41 @@ function Dashboard() {
     <div className="animate-fade-in">
       <h1 style={{ fontSize: '2rem', marginBottom: '2rem', fontWeight: 'bold' }}>Dashboard</h1>
       <div className="dashboard-stats">
-        <div className="glass-panel stat-card">
+        <div className="glass-panel stat-card hoverable">
           <div className="stat-icon" style={{ color: 'var(--primary)' }}><CheckSquare /></div>
           <div>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Total Tasks</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.total_tasks}</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Tasks</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>{stats.total_tasks}</div>
           </div>
         </div>
-        <div className="glass-panel stat-card">
+        <div className="glass-panel stat-card hoverable">
           <div className="stat-icon" style={{ color: 'var(--success)' }}><CheckSquare /></div>
           <div>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Completed</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.completed_tasks}</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Completed</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>{stats.completed_tasks}</div>
           </div>
         </div>
-        <div className="glass-panel stat-card">
+        <div className="glass-panel stat-card hoverable">
           <div className="stat-icon" style={{ color: 'var(--warning)' }}><CheckSquare /></div>
           <div>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Pending</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.pending_tasks}</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pending</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>{stats.pending_tasks}</div>
           </div>
         </div>
-        <div className="glass-panel stat-card">
+        <div className="glass-panel stat-card hoverable">
           <div className="stat-icon" style={{ color: 'var(--danger)' }}><CheckSquare /></div>
           <div>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Overdue</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.overdue_tasks}</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Overdue</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>{stats.overdue_tasks}</div>
           </div>
         </div>
       </div>
       
-      <div className="glass-panel">
-        <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Recent Activity</h2>
-        <p style={{ color: 'var(--text-secondary)' }}>No recent activity to show.</p>
+      <div className="glass-panel hoverable animate-fade-in-delayed">
+        <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <FolderGit2 size={20} style={{ color: 'var(--primary)' }} /> Recent Activity
+        </h2>
+        <p style={{ color: 'var(--text-secondary)' }}>No recent activity to show. Keep up the good work!</p>
       </div>
     </div>
   );
@@ -208,10 +210,10 @@ function Projects() {
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
         {projects.map((p: any) => (
-          <div key={p._id} className="glass-panel">
+          <div key={p._id} className="glass-panel hoverable">
             <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{p.name}</h3>
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>{p.description}</p>
-            <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Members: {p.members.length}</div>
+            <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Members: {p.members?.length || 0}</div>
           </div>
         ))}
         {projects.length === 0 && <p>No projects found.</p>}
@@ -248,25 +250,25 @@ function Tasks() {
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Tasks</h1>
         <button className="btn-primary">New Task</button>
       </div>
-      <div className="glass-panel" style={{ padding: '0' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+      <div className="glass-panel hoverable" style={{ padding: '0', overflow: 'hidden' }}>
+        <table className="custom-table">
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
-              <th style={{ padding: '1rem 1.5rem', fontWeight: '500' }}>Title</th>
-              <th style={{ padding: '1rem 1.5rem', fontWeight: '500' }}>Status</th>
-              <th style={{ padding: '1rem 1.5rem', fontWeight: '500' }}>Deadline</th>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Deadline</th>
             </tr>
           </thead>
           <tbody>
             {tasks.map((t: any) => (
-              <tr key={t._id} style={{ borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '1rem 1.5rem' }}>{t.title}</td>
-                <td style={{ padding: '1rem 1.5rem' }}>{getStatusBadge(t.status)}</td>
-                <td style={{ padding: '1rem 1.5rem' }}>{new Date(t.deadline).toLocaleDateString()}</td>
+              <tr key={t._id}>
+                <td>{t.title}</td>
+                <td>{getStatusBadge(t.status)}</td>
+                <td>{t.deadline ? new Date(t.deadline).toLocaleDateString() : 'N/A'}</td>
               </tr>
             ))}
             {tasks.length === 0 && (
-              <tr><td colSpan={3} style={{ padding: '1.5rem', textAlign: 'center' }}>No tasks found.</td></tr>
+              <tr><td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No tasks found.</td></tr>
             )}
           </tbody>
         </table>
