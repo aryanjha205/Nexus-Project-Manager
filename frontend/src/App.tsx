@@ -441,8 +441,8 @@ function Tasks() {
           </button>
         )}
       </div>
-      <div className="glass-panel hoverable" style={{ padding: '0', overflow: 'hidden' }}>
-        <table className="custom-table">
+      <div className="glass-panel hoverable" style={{ padding: '0', overflowX: 'auto' }}>
+        <table className="custom-table" style={{ minWidth: '600px' }}>
           <thead>
             <tr>
               <th>Title</th>
@@ -536,8 +536,8 @@ function Team() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Team Directory</h1>
       </div>
-      <div className="glass-panel hoverable" style={{ padding: '0', overflow: 'hidden' }}>
-        <table className="custom-table">
+      <div className="glass-panel hoverable" style={{ padding: '0', overflowX: 'auto' }}>
+        <table className="custom-table" style={{ minWidth: '600px' }}>
           <thead>
             <tr>
               <th>Name</th>

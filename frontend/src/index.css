@@ -314,6 +314,8 @@ input::placeholder {
   background: var(--surface-color);
   border: 1px solid var(--border-highlight);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .truncate {
