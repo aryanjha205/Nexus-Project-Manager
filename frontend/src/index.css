@@ -554,3 +554,68 @@ input::placeholder {
   background: rgba(255,255,255,0.1);
   transform: rotate(90deg);
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 1.5rem;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 20;
+  }
+
+  .sidebar nav {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem !important;
+  }
+
+  .nav-link {
+    justify-content: center;
+    margin-bottom: 0;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .main-content {
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .custom-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+    width: 95% !important;
+  }
+
+  .login-container {
+    flex-direction: column;
+  }
+
+  .login-form-container {
+    padding: 1rem;
+  }
+
+  form > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}

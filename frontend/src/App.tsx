@@ -21,7 +21,7 @@ function Sidebar({ onLogout }: { onLogout: () => void }) {
   return (
     <div className="sidebar">
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--primary), var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>PM</div>
+        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--primary), var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>NX</div>
         <h2 style={{ fontSize: '1.25rem', fontWeight: '700' }}>Nexus</h2>
       </div>
       <nav style={{ flex: 1, marginBottom: '2rem' }}>
@@ -114,7 +114,7 @@ function Login({ setToken }: { setToken: (token: string) => void }) {
       {/* Left side: branding/visuals */}
       <div className="login-banner">
         <div className="banner-content animate-fade-in">
-          <div className="logo-box">PM</div>
+          <div className="logo-box">NX</div>
           <h1 className="banner-title">Nexus</h1>
           <p className="banner-subtitle">
             Orchestrate your workflow, track progress, and conquer your goals with the ultimate project management platform.
@@ -243,29 +243,6 @@ function Dashboard() {
           <div>
             <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Overdue</div>
             <div style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>{stats.overdue_tasks}</div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="glass-panel hoverable animate-fade-in-delayed" style={{ position: 'relative', overflow: 'hidden' }}>
-        <div className="card-gradient-top"></div>
-        <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <FolderGit2 size={20} style={{ color: 'var(--primary)' }} /> System Activity
-        </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '0.75rem', border: '1px solid var(--border)', transition: 'all 0.3s' }} className="hoverable-item">
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 10px var(--success)' }}></div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: '600' }}>Platform initialization complete</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Just now</div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '0.75rem', border: '1px solid var(--border)', transition: 'all 0.3s' }} className="hoverable-item">
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--primary)', boxShadow: '0 0 10px var(--primary)' }}></div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: '600' }}>Dashboard statistics updated</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>2 mins ago</div>
-            </div>
           </div>
         </div>
       </div>
