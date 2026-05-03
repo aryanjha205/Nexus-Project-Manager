@@ -24,11 +24,7 @@ function Sidebar({ onLogout }: { onLogout: () => void }) {
         <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--primary), var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>PM</div>
         <h2 style={{ fontSize: '1.25rem', fontWeight: '700' }}>Nexus</h2>
       </div>
-      <div style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', marginBottom: '2rem', border: '1px solid var(--border)' }}>
-        <div style={{ fontSize: '0.875rem', fontWeight: '600' }} className="truncate" title={email}>{email}</div>
-        <div style={{ fontSize: '0.75rem', color: 'var(--accent)', marginTop: '0.25rem', fontWeight: '500' }}>{role} Role</div>
-      </div>
-      <nav style={{ flex: 1 }}>
+      <nav style={{ flex: 1, marginBottom: '2rem' }}>
         {navItems.filter(item => !item.adminOnly || role === 'Admin').map((item) => (
           <Link
             key={item.path}
@@ -40,7 +36,11 @@ function Sidebar({ onLogout }: { onLogout: () => void }) {
           </Link>
         ))}
       </nav>
-      <button onClick={onLogout} className="nav-link" style={{ marginTop: 'auto', color: 'var(--danger)' }}>
+      <div style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', marginBottom: '1rem', border: '1px solid var(--border)' }}>
+        <div style={{ fontSize: '0.875rem', fontWeight: '600' }} className="truncate" title={email}>{email}</div>
+        <div style={{ fontSize: '0.75rem', color: 'var(--accent)', marginTop: '0.25rem', fontWeight: '500' }}>{role} Role</div>
+      </div>
+      <button onClick={onLogout} className="nav-link" style={{ color: 'var(--danger)', width: '100%' }}>
         <LogOut size={20} />
         Logout
       </button>
