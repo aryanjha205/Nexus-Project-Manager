@@ -17,6 +17,7 @@ function Sidebar({ onLogout }: { onLogout: () => void }) {
   const token = localStorage.getItem('token');
   const role = token ? JSON.parse(atob(token.split('.')[1])).role : 'Member';
   const email = token ? JSON.parse(atob(token.split('.')[1])).sub : '';
+  const name = token ? (JSON.parse(atob(token.split('.')[1])).name || email) : '';
 
   return (
     <div className="sidebar">
@@ -37,7 +38,7 @@ function Sidebar({ onLogout }: { onLogout: () => void }) {
         ))}
       </nav>
       <div style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', marginBottom: '1rem', border: '1px solid var(--border)' }}>
-        <div style={{ fontSize: '0.875rem', fontWeight: '600' }} className="truncate" title={email}>{email}</div>
+        <div style={{ fontSize: '0.875rem', fontWeight: '600' }} className="truncate" title={email}>{name}</div>
         <div style={{ fontSize: '0.75rem', color: 'var(--accent)', marginTop: '0.25rem', fontWeight: '500' }}>{role} Role</div>
       </div>
       <button onClick={onLogout} className="nav-link" style={{ color: 'var(--danger)', width: '100%' }}>

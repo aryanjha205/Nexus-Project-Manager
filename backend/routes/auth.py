@@ -62,5 +62,5 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     if not user.get("is_active"):
         raise HTTPException(status_code=400, detail="Inactive user. Please verify OTP.")
         
-    access_token = create_access_token(data={"sub": user["email"], "role": user.get("role", "Member")})
+    access_token = create_access_token(data={"sub": user["email"], "role": user.get("role", "Member"), "name": user.get("name", user["email"])})
     return {"access_token": access_token, "token_type": "bearer"}
